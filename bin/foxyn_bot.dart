@@ -46,6 +46,8 @@ void main() {
       sendMail(approve, email, playername, feedbackBuilder(formChoices));
 
       if (approve) addToWhitelists(playername);
+
+      event.message!.createReaction(UnicodeEmoji("🆗"));
     }
   });
 }
