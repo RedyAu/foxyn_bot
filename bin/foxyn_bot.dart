@@ -1,7 +1,8 @@
 import 'package:nyxx/nyxx.dart';
-
 import 'credentials.dart';
-import 'utils/uuid.dart';
+import 'utils/sendEmail.dart';
+import 'utils/feedbackBuilder.dart';
+import 'utils/whitelist.dart';
 
 void main() {
   final bot = Nyxx(BOT_TOKEN, GatewayIntents.allUnprivileged);
@@ -20,10 +21,12 @@ void main() {
   });
 
   bot.onMessageReactionAdded.listen((event) {
-    if (event.emoji.formatForMessage() == "✅" &&
+    if ((event.emoji.formatForMessage() == "✅" ||
+            event.emoji.formatForMessage() == "❌") &&
         event.channel.id == REG_CHANNEL_ID &&
-        event.user.hashCode != bot.self.id) {
-      print("approved registration.");
+        event.user.hashCode != 877205534766419968) {
+      bool approve = event.emoji.formatForMessage() == "✅";
+      print(approve ? "Approved registration." : "Denied registration.");
 
       String email = event.message!.content
           .split("\n")
@@ -33,10 +36,16 @@ void main() {
           .split("\n")
           .firstWhere((element) => element.startsWith("playername:"))
           .split("playername:")[1];
+      List<String> formChoices = event.message!.content
+          .split("\n")
+          .firstWhere((element) => element.startsWith("formChoices:"))
+          .split("formChoices:")[1]
+          .split(" ");
 
       print("email: $email, playername: $playername");
+      sendMail(approve, email, playername, feedbackBuilder(formChoices));
 
-      event.message!.createReaction(UnicodeEmoji("🆗"));
+      if (approve) addToWhitelists(playername);
     }
   });
 }
