@@ -7,3 +7,5 @@ build/
 
 # No, you may not.
 bin/credentials.dart
+whitelist.json
+foxyn_bot.exe
