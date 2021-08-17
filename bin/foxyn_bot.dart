@@ -45,7 +45,12 @@ void main() {
       print("email: $email, playername: $playername");
       sendMail(approve, email, playername, feedbackBuilder(formChoices));
 
-      if (approve) addToWhitelists(playername);
+      if (approve) {
+        addToWhitelists(playername);
+        bot.fetchChannel<TextChannel>(ANNOUNCE_CHANNEL_ID.toSnowflake()).then(
+            (value) => value.sendMessage(MessageBuilder.content(
+                "👋 **${playername}** regisztrációját elfogadtuk.")));
+      }
 
       event.message!.createReaction(UnicodeEmoji("🆗"));
     }
