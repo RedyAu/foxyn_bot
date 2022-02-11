@@ -24,7 +24,7 @@ void sendMail(bool approve, String emailAddress, String playerName,
     ..subject = approve ? 'Üdv a Foxynon!' : 'Regisztrációd elutasítottuk.'
     ..recipients.addAll(toAd([emailAddress]))
     ..text = approve
-        ? 'Szia $playerName!\nElfogadtuk a Foxyn regisztrációdat.\n\nA belépésről továbbiakat a Discord szerverünkön olvashatsz, csatlakozz: https://discord.gg/CuExeek\n\nVisszajelzés a regisztrációs íven megadottakhoz:\n${feedback}Várunk a szerveren!'
+        ? 'Szia $playerName!\nElfogadtuk a Foxyn regisztrációdat.\n\nA belépésről továbbiakat a Discord szerverünkön olvashatsz, csatlakozz: https://foxyn.net/discord\n\nVisszajelzés a regisztrációs íven megadottakhoz:\n${feedback}Várunk a szerveren!'
         : 'Szia $playerName!\n\nFoxyn regisztrációdat sajnos elutasítottuk.\nDöntésünk végleges, kérünk, ne próbálozz újból a regisztrációval.';
 
   try {

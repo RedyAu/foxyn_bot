@@ -3,14 +3,21 @@ import 'credentials.dart';
 import 'utils/sendEmail.dart';
 import 'utils/feedbackBuilder.dart';
 import 'utils/whitelist.dart';
+import 'dart:io';
 
-void main() {
+void main() async {
+  await connect();
+
   final bot = Nyxx(BOT_TOKEN, GatewayIntents.allUnprivileged);
 
   bot.onMessageReceived.listen((event) async {
     if (event.message.content == ".ping") {
-      event.message.channel.sendMessage(MessageBuilder.content("Pong!"));
-      event.message.createReaction(UnicodeEmoji("✅"));
+      event.message.createReaction(UnicodeEmoji("🏓"));
+    }
+    if (event.message.content == ".time") {
+      event.message.channel.sendMessage(MessageBuilder.content("""
+Time in Hungary: ${DateTime.now().toIso8601String()}
+Time in Sydney: ${DateTime.now().subtract(Duration(hours: 10)).toIso8601String()}"""));
     }
     if (event.message.content.startsWith("[foxynreg]") &&
         event.message.channel.id == REG_CHANNEL_ID) {
@@ -55,4 +62,27 @@ void main() {
       event.message!.createReaction(UnicodeEmoji("🆗"));
     }
   });
+}
+
+Future connect() async {
+  while (true) {
+    print("Checking connection to the internet...");
+
+    bool connected = false;
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        connected = true;
+        print("  Connection OK\n");
+      }
+    } catch (e) {
+      print("  Couldn't connect, retrying in 5s...\n");
+    }
+
+    if (connected)
+      return;
+    else {
+      await Future.delayed(Duration(seconds: 5));
+    }
+  }
 }
