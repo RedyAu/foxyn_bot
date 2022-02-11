@@ -17,7 +17,7 @@ void main() async {
     if (event.message.content == ".time") {
       event.message.channel.sendMessage(MessageBuilder.content("""
 Time in Hungary: ${DateTime.now().toIso8601String()}
-Time in Sydney: ${DateTime.now().subtract(Duration(hours: 10)).toIso8601String()}"""));
+Time in Sydney: ${DateTime.now().add(Duration(hours: 10)).toIso8601String()}"""));
     }
     if (event.message.content.startsWith("[foxynreg]") &&
         event.message.channel.id == REG_CHANNEL_ID) {
